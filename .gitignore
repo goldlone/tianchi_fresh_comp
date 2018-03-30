@@ -1,6 +1,6 @@
 # datasets
-tianchi_fresh_comp_train_item.csv
-tianchi_fresh_comp_train_user.csv
+train_item.csv
+train_user.csv
 选手结果数据样例.csv
 
 # idea
