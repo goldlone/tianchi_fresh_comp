@@ -9,8 +9,8 @@ offline_candidate_day30 = []
 online_candidate_day31 = []
 
 # 筛选出28-31的数据
-out = open('./28_31.csv', 'w')
-with open('./train_user.csv') as f:
+out = open('./datas/28_31.csv', 'w')
+with open('./datas/train_user.csv') as f:
     context = f.readlines()
     for line in context:
         line1 = line.replace('\n', '')

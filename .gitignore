@@ -1,7 +1,9 @@
 # datasets
-train_item.csv
-train_user.csv
-选手结果数据样例.csv
+datas/*
+*.csv
+# train_item.csv
+# train_user.csv
+# 选手结果数据样例.csv
 
 # idea
 .idea/*

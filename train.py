@@ -9,8 +9,10 @@ offline_candidate_day30 = []
 online_candidate_day31 = []
 
 # 读入数据
-f = open('./28_31.csv', 'r')
+f = open('./datas/train_user.csv', 'r')
 context = f.readlines()
+pre_f = open('./datas/act_30.csv', 'w')
+pre_f.write("user_id,item_id\n")
 
 # 预处理特征及标签
 ui_dict = [{} for i in range(4)]
@@ -18,8 +20,8 @@ ui_buy = {}
 for line in context:
     line = line.replace('\n', '')
     arr = line.split(',')
-    # if arr[0] == 'user_id':
-    #     continue
+    if arr[0] == 'user_id':
+        continue
     date = arr[-1]
     d = time.strptime(date, "%Y-%m-%d %H")
     month = d.tm_mon
@@ -35,11 +37,19 @@ for line in context:
         ui_dict[op][uid] += 1
     else:
         ui_dict[op][uid] = 1
+
     # 设置标签
     if op == 3:
-        ui_buy[uid] = 1
+        if no<30:
+            ui_buy[uid] = 1
+        elif no == 30:
+            pre_f.write(uid[0])
+            pre_f.write(",")
+            pre_f.write(uid[1])
+            pre_f.write("\n")
 
-    if no == 29:
+    # if no == 29:
+    if no <= 29:
         train_day29.append(uid)
     elif no == 30:
         offline_candidate_day30.append(uid)
@@ -49,6 +59,7 @@ train_day29 = list(set(train_day29))
 offline_candidate_day30 = list(set(offline_candidate_day30))
 online_candidate_day31 = list(set(online_candidate_day31))
 
+pre_f.close()
 # dd = ui_dict[3]
 # for i in dd:
 #     print(i)
@@ -114,14 +125,14 @@ model.fit(X, y)
 
 # 评估
 py = model.predict_proba(pX)
-print("py = ", py)
-print()
+# print("py = ", py)
+# print()
 npy = []
 for a in py:
     npy.append(a[1])
 py = npy
-print("pX = ", pX)
-print()
+# print("pX = ", pX)
+# print()
 
 
 
@@ -137,10 +148,10 @@ lx = zip(offline_candidate_day30, py)
 # sort by predict score
 lx = sorted(lx, key=lambda x : x[1], reverse=True)
 # print lx
-print("-----------")
+# print("-----------")
 print(lx)
 
-wf = open("ans.cvs", 'w')
+wf = open("./datas/ans_30.csv", 'w')
 wf.write('user_id,item_id\n')
 for item in lx:
     print("user_id=%s,item_id=%s,P=%f" % (item[0][0], item[0][1], item[1]))
